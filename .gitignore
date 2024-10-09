@@ -8,3 +8,9 @@ result_bm25_1.tsv
 result_bm25_2.tsv
 result_tfidf_1.tsv
 result_tfidf_2.tsv
+
+# Ignore evaluation outputs
+TF-IDF_eval.png
+TF-IDF_ski_jump_plot.png
+BM25_eval.png
+BM25_ski_jump_plot.png

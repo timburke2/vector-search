@@ -83,6 +83,7 @@ Ensure you have the following data files available:
 * Term Index: A compressed JSON file containing term frequencies, IDF, and BM25 IDF scores (term_index.json.gz).
 * Vectorized Answers: A compressed JSON file with L2-normalized vectors for each answer based on TF-IDF and BM25 weights (vectorized_answers.json.gz).
 * Search Results: TSV files in TREC format with top 100 document matches for each topic (result_tfidf_1.tsv, result_tfidf_2.tsv, result_bm25_1.tsv, result_bm25_2.tsv).
+* Evaluations: PNG files with evaluation metrics and ski-jump plots for each run
 
 ## Evaluation
 
@@ -99,17 +100,18 @@ The search results are evaluated using the following metrics:
 The full_eval function runs the evaluation:
 
 ```python
-full_eval('qrel_1.tsv', 'result_tfidf_1.tsv')
-full_eval('qrel_1.tsv', 'result_bm25_1.tsv')
+full_eval('qrel_1.tsv', 'result_tfidf_1.tsv', 'TF-IDF')
+full_eval('qrel_1.tsv', 'result_bm25_1.tsv', 'BM25')
 ```
+The metrics are saved as a table, where the third argument passed to the function informs the name
 
 ## Results and Visualization
 
 The project generates a ski-jump plot to visualize the Precision@5 values across different topics:
 
 ```python
-plot_skijump('qrel_1.tsv', 'result_tfidf_1.tsv', k=5)
-plot_skijump('qrel_1.tsv', 'result_bm25_1.tsv', k=5)
+plot_skijump('qrel_1.tsv', 'result_tfidf_1.tsv', 'TF-IDF', k=5)
+plot_skijump('qrel_1.tsv', 'result_bm25_1.tsv', 'BM25', k=5)
 ```
 
 The plot highlights which queries performed well and which did not, enabling analysis of model performance.
