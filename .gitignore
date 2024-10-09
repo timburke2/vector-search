@@ -1,0 +1,10 @@
+# Ignore code generated files
+tokenized_answers.json.gz
+term_index.json.gz
+vectorized_answers.json.gz
+
+# Ignore result binaries
+result_bm25_1.tsv
+result_bm25_2.tsv
+result_tfidf_1.tsv
+result_tfidf_2.tsv
