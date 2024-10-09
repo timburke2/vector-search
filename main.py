@@ -692,4 +692,4 @@ def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topi
 
 
 if __name__ == '__main__':
-    main(overwrite=True)
+    main()
