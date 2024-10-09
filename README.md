@@ -39,6 +39,7 @@ Ensure you have the following data files available:
 * Answers.json (90MB JSON file containing answers)
 * topics_1.json and topics_2.json (files containing topics/questions)
 * qrel_1.tsv (file containing qrel data for evaluation)
+* qrel_2.tsv (if testing system)
 
 ## Usage
 ### Running the Code
@@ -54,22 +55,26 @@ Ensure you have the following data files available:
     main.py --overwrite
     ```
 
-3. Search: Perform the search for both TF-IDF and BM25 with precomputed files, producing result binaries:
+3. Search: Perform the search for both TF-IDF and BM25 with precomputed files, producing result binaries, folled by evaluation:
 
     ```bash
     python main.py --search
-    ```
-    
+
 4. Evaluate: Perform the evaluation for both TF-IDF and BM25 with existing result binaries:
    ```bash
    python main.py --evaluate
    ```
 
+5. No Evaluate: Perform the search for both TF-IDF and BM25 and skip evaluation:
+  ```bash
+  python main.pu --no-evaluate
+  ```
+  
+
 ## Command-line Arguments
 
 * overwrite: Boolean flag to overwrite precomputed files (default: False).
 * search: Boolean flag to perform search (default: True).
-* no-search: Boolean flag to skip search.
 * evaluate: Boolean flag to perform evaluation (default: True).
 * no-evaluate: Boolean flag to skip evaluation.
 
