@@ -20,6 +20,7 @@ This project requires Python 3.x and the following Python libraries:
 * json
 * gzip
 * csv
+* argparse
 
 You can install the dependencies using pip:
   
@@ -68,7 +69,9 @@ Ensure you have the following data files available:
 
 * overwrite: Boolean flag to overwrite precomputed files (default: False).
 * search: Boolean flag to perform search (default: True).
+* no-search: Boolean flag to skip search.
 * evaluate: Boolean flag to perform evaluation (default: True).
+* no-evaluate: Boolean flag to skip evaluation.
 
 ## Files and Data
 
