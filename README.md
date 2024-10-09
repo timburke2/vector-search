@@ -21,7 +21,7 @@ This project requires Python 3.x and the following Python libraries:
 * gzip
 * csv
 
-  You can install the dependencies using pip:
+You can install the dependencies using pip:
   
   ```python
   pip install beautifulsoup4 ranx tqdm matplotlib
