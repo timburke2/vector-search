@@ -3,8 +3,13 @@ from ranx import Qrels, Run, evaluate
 from pathlib import Path
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-import re, json, gzip, math
-import csv, time
+import re 
+import json
+import gzip
+import math
+import csv
+import time
+import argparse
 
 def clean_text(text): 
     """
@@ -639,7 +644,7 @@ def precompute(answers_file='Answers.json'):
 
     return (tokenized_answers, term_index, vectorized_answers)
 
-def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topics_2.json', qrel ='qrel_1.tsv', overwrite=False, search=True):
+def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topics_2.json', qrel ='qrel_1.tsv'):
     """
     Main function to execute the entire search and evaluation pipeline.
 
@@ -652,43 +657,62 @@ def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topi
         topics_1 (str): The file path to the first set of topics. Defaults to 'topics_1.json'.
         topics_2 (str): The file path to the second set of topics. Defaults to 'topics_2.json'.
         qrel (str): The file path to the qrel (ground truth) file. Defaults to 'qrel_1.tsv'.
-        overwrite (bool): If True, overwrites existing precomputed files. Defaults to False.
-        search (bool): If True, performs the search operations. Defaults to True.
 
     Returns:
         None
     """
+
+    parser = argparse.ArgumentParser(description="Run the IR system with TF-IDF or BM25")
+    parser.add_argument('--overwrite', action='store_true', default=False, 
+                        help="Set to overwrite precomputed files (default: False)")
+    parser.add_argument('--search', action='store_true', default=True, 
+                        help="Enable search process (default: True)")
+    parser.add_argument('--no-search', dest='search', action='store_false', 
+                        help="Disable search process")
+    parser.add_argument('--evaluate', action='store_true', default=True, 
+                        help="Enable evaluation process (default: True)")
+    parser.add_argument('--no-evaluate', dest='evaluate', action='store_false', 
+                        help="Disable evaluation process")
+    args = parser.parse_args()
+    
 
     # Verify whether or not the files exist
     check_files = [Path('tokenized_answers.json.gz').exists(), 
                    Path('term_index.json.gz').exists(),
                    Path('vectorized_answers.json.gz').exists()]
     
-    # If any of them don't, or if overwrite is specified, recreate them
-    if overwrite or not all(check_files):
+    # If any of them don't, or if overwrite is specified, recreate them and load data
+    if args.overwrite or not all(check_files):
         print("Creating files")
         tokenized_answers, term_index, vectorized_answers = precompute(answers_file)
-    else: # Specify file names for preexisting files
+    else: # Specify file paths for preexisting files and load data
         print('Files already found')
         tokenized_answers = get_data_from_gz('tokenized_answers.json.gz')
         term_index = get_data_from_gz('term_index.json.gz')
         vectorized_answers = get_data_from_gz('vectorized_answers.json.gz')
 
 
-    if search:
+    if args.search:
         topics = (topics_1, topics_2)
 
         # Full search is both topic sets
         tfidf_binaries = full_search(topics, tokenized_answers, term_index, vectorized_answers, isbm25=False)
         bm25_binaries = full_search(topics, tokenized_answers, term_index, vectorized_answers, isbm25=True)
+    else:
+        # Assumes result binaries exist, sets them to preexisting files
+        tfidf_binaries = ('result_tfidf_1.tsv', 'result_tfidf_2.tsv')
+        bm25_binaries = ('result_bm25_1.tsv', 'result_bm25_2.tsv')
 
-    # Full eval displays table of benchmarks for each binary
-    full_eval(qrel, tfidf_binaries[0])
-    full_eval(qrel, bm25_binaries[0])
+    if args.evaluate:
+        # Full eval displays table of benchmarks for each binary
+        full_eval(qrel, tfidf_binaries[0])
+        full_eval(qrel, bm25_binaries[0])
 
-    # Displays ski jump for p@5 for all queries
-    plot_skijump(qrel, tfidf_binaries[0])
-    plot_skijump(qrel, bm25_binaries[0])
+        # Displays ski jump for p@5 for all queries
+        plot_skijump(qrel, tfidf_binaries[0])
+        plot_skijump(qrel, bm25_binaries[0])
+    else:
+        print("Evaluation skipped")
 
 
 if __name__ == '__main__':
