@@ -379,7 +379,7 @@ def find_query_terms_tfidf(query_text, term_index, num_terms=10):
     # Returns descented sorted list of terms, num_terms in length
     return sorted(query_terms.items(), key=lambda x : x[1], reverse=True)[:num_terms]
 
-def find_query_terms_bm25(query_text, term_index, avg_doc_length, num_terms=10):
+def find_query_terms_bm25(query_text, term_index, avg_doc_length, num_terms=5):
     """
     Selects the top query terms based on BM25 weights.
 
@@ -396,6 +396,10 @@ def find_query_terms_bm25(query_text, term_index, avg_doc_length, num_terms=10):
         list of tuples: A list of tuples where each tuple contains a term and its BM25 weight,
                         sorted in descending order by weight.
     """
+
+    # Defaults to using full query text if num_terms is out of range
+    if num_terms == 0 or num_terms > len(query_text):
+        num_terms = len(query_text)
 
     # BM25 term frequency default parameters
     k = 1.2
@@ -537,7 +541,7 @@ def create_result_binary(final_results, outfile, run_name):
 
 def full_eval(qrel_file, result_binary, benchmark_tag):
     """
-    Evaluates a search run against the ground truth using standard metrics.
+    Evaluates a search run against the qrel using standard metrics.
 
     This function calculates metrics such as precision@1, precision@5, NDCG@5,
     MRR, and MAP, and displays them in a table, saved in .png format
@@ -647,7 +651,7 @@ def precompute(answers_file='Answers.json'):
 
     return (tokenized_answers, term_index, vectorized_answers)
 
-def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topics_2.json', qrel ='qrel_1.tsv'):
+def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topics_2.json'):
     """
     Main function to execute the entire search and evaluation pipeline.
 
@@ -659,7 +663,6 @@ def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topi
         answers_file (str): The file path to the raw answers JSON file. Defaults to 'Answers.json'.
         topics_1 (str): The file path to the first set of topics. Defaults to 'topics_1.json'.
         topics_2 (str): The file path to the second set of topics. Defaults to 'topics_2.json'.
-        qrel (str): The file path to the qrel (ground truth) file. Defaults to 'qrel_1.tsv'.
 
     Returns:
         None
@@ -707,13 +710,20 @@ def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topi
         bm25_binaries = ('result_bm25_1.tsv', 'result_bm25_2.tsv')
 
     if args.evaluate:
+        # Checks if qrel is the default, otherwise assume it is qrel 2
+        if Path('qrel_2.tsv').exists():
+            qrel = 'qrel_2.tsv'
+            topic_flag = 1
+        else:
+            qrel = 'qrel_1.tsv'
+            topic_flag = 0
         # Creates table of benchmarks for each binary
-        full_eval(qrel, tfidf_binaries[0], 'TF-IDF')
-        full_eval(qrel, bm25_binaries[0], 'BM25')
+        full_eval(qrel, tfidf_binaries[topic_flag], 'TF-IDF')
+        full_eval(qrel, bm25_binaries[topic_flag], 'BM25')
 
         # Creates ski jump for p@5 for all queries
-        plot_skijump(qrel, tfidf_binaries[0], 'TF-IDF')
-        plot_skijump(qrel, bm25_binaries[0], 'BM25')
+        plot_skijump(qrel, tfidf_binaries[topic_flag], 'TF-IDF')
+        plot_skijump(qrel, bm25_binaries[topic_flag], 'BM25')
     else:
         print("Evaluation skipped")
 
