@@ -55,7 +55,7 @@ Ensure you have the following data files available:
     main.py --overwrite
     ```
 
-3. Search: Perform the search for both TF-IDF and BM25 with precomputed files, producing result binaries, folled by evaluation:
+3. Search: Perform the search for both TF-IDF and BM25 with precomputed files, producing result binaries, follewed by evaluation:
 
     ```bash
     python main.py --search
