@@ -379,7 +379,7 @@ def find_query_terms_tfidf(query_text, term_index, num_terms=10):
     # Returns descented sorted list of terms, num_terms in length
     return sorted(query_terms.items(), key=lambda x : x[1], reverse=True)[:num_terms]
 
-def find_query_terms_bm25(query_text, term_index, avg_doc_length, num_terms=5):
+def find_query_terms_bm25(query_text, term_index, avg_doc_length, num_terms=10):
     """
     Selects the top query terms based on BM25 weights.
 
