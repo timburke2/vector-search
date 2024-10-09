@@ -42,31 +42,33 @@ Ensure you have the following data files available:
 ## Usage
 ### Running the Code
 
-1. Preprocessing: Tokenize answers, create term indices, and vectorize the answers:
-   ```python
+1. Full Run: Tokenize answers, create term indices, and vectorize the answers. Performs search for both TF-IDF and BM25, and produces evaluation metrics:
+   ```bash
     python main.py
     ```
-
-2. Search: Perform the search for both TF-IDF and BM25:
-
-    ```python
-    python main.py --search
-    ```
-
-3. Overwrite Precomputed Files: If you want to overwrite the precomputed files (tokenized answers, term indices, and vectorized answers), run:
+  
+2. Overwrite Precomputed Files: If you want to overwrite the precomputed files (tokenized answers, term indices, and vectorized answers), run:
      
-    ```python
+    ```bash
     main.py --overwrite
     ```
 
+3. Search: Perform the search for both TF-IDF and BM25 with precomputed files, producing result binaries:
+
+    ```bash
+    python main.py --search
+    ```
+    
+4. Evaluate: Perform the evaluation for both TF-IDF and BM25 with existing result binaries:
+   ```bash
+   python main.py --evaluate
+   ```
+
 ## Command-line Arguments
 
-* answers_file: Path to the JSON file containing answers (default: Answers.json).
-* topics_1: Path to the first topic set (default: topics_1.json).
-* topics_2: Path to the second topic set (default: topics_2.json).
-* qrel: Path to the qrel file for evaluation (default: qrel_1.tsv).
 * overwrite: Boolean flag to overwrite precomputed files (default: False).
 * search: Boolean flag to perform search (default: True).
+* evaluate: Boolean flag to perform evaluation (default: True).
 
 ## Files and Data
 
