@@ -3,13 +3,16 @@
 This project implements two advanced information retrieval models: TF-IDF and BM25. The goal of the project is to retrieve relevant answers to questions about traveling. The project includes tokenizing text, creating term indices, and performing searches based on query vectors using both models. The results are evaluated using standard metrics such as Precision@1, Precision@5, nDCG@5, MRR, and MAP.
 
 ## Project Overview
+
   1. Implement TF-IDF and BM25 information retrieval models.
   2. Use a vector space model and inverted index to store token frequencies and retrieve relevant documents.
   3. Evaluate the results using multiple metrics, including Precision@1, Precision@5, nDCG@5, MRR, and MAP.
   4. Produce a ski-jump plot based on Precision@5 to analyze the performance of both models.
 
 ## Setup and Installation
+
 ### Prerequisites
+
 This project requires Python 3.x and the following Python libraries:
 
 * beautifulsoup4
@@ -42,15 +45,17 @@ Ensure you have the following data files available:
 * qrel_2.tsv (if testing system)
 
 ## Usage
+
 ### Running the Code
 
 1. Full Run: Tokenize answers, create term indices, and vectorize the answers. Performs search for both TF-IDF and BM25, and produces evaluation metrics:
+
    ```bash
     python main.py
     ```
   
 2. Overwrite Precomputed Files: If you want to overwrite the precomputed files (tokenized answers, term indices, and vectorized answers), run:
-     
+
     ```bash
     main.py --overwrite
     ```
@@ -61,16 +66,17 @@ Ensure you have the following data files available:
     python main.py --search
 
 4. Evaluate: Perform the evaluation for both TF-IDF and BM25 with existing result binaries:
+
    ```bash
    python main.py --evaluate
    ```
 
 5. No Evaluate: Perform the search for both TF-IDF and BM25 and skip evaluation:
+
   ```bash
   python main.pu --no-evaluate
   ```
   
-
 ## Command-line Arguments
 
 * overwrite: Boolean flag to overwrite precomputed files (default: False).
@@ -103,7 +109,7 @@ The search results are evaluated using the following metrics:
 * MRR (Mean Reciprocal Rank)
 * MAP (Mean Average Precision)
 
-### Example Evaluation:
+### Example Evaluation
 
 The full_eval function runs the evaluation:
 
@@ -111,6 +117,7 @@ The full_eval function runs the evaluation:
 full_eval('qrel_1.tsv', 'result_tfidf_1.tsv', 'TF-IDF')
 full_eval('qrel_1.tsv', 'result_bm25_1.tsv', 'BM25')
 ```
+
 The metrics are saved as a table, where the third argument passed to the function informs the name
 
 ## Results and Visualization

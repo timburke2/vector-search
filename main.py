@@ -727,6 +727,5 @@ def main(answers_file='Answers.json', topics_1 ='topics_1.json', topics_2 ='topi
     else:
         print("Evaluation skipped")
 
-
 if __name__ == '__main__':
     main()
